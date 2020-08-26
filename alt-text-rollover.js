@@ -1,5 +1,5 @@
 let altDisplay = document.createElement('div');
-document.body.appendChild(display);
+document.body.appendChild(altDisplay);
 altDisplay.style.position = 'absolute';
 altDisplay.style.background = 'yellow';
 altDisplay.style.padding = '10px';
