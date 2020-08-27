@@ -25,7 +25,7 @@
     i.addEventListener('mouseover',e => {
       e.target.style.opacity = 0.7;
       let mouse = getposition(e);
-      let top = mouse.y + 5 + 'px';
+      let top = mouse.y + window.scrollY + 5 + 'px';
       let left = mouse.x + 5 + 'px';
 
       if(mouse.x+20+150 > window.innerWidth) {
