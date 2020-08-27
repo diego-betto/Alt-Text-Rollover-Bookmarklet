@@ -1,8 +1,15 @@
 (function(){
+  if (document.querySelector('#alt-text-rollover-bookmark-swatch')) {
+    return;
+  }
+
+  // create and style swatch 
   let altDisplay = document.createElement('div');
   document.body.appendChild(altDisplay);
+  altDisplay.id = 'alt-text-rollover-bookmark-swatch';
   altDisplay.style.position = 'fixed';
   altDisplay.style.background = 'yellow';
+  altDisplay.style.cursor = 'move';
   altDisplay.style.padding = '10px';
   altDisplay.style.fontFamily = 'Sans-serif';
   altDisplay.style.maxWidth = '250px';
@@ -14,35 +21,34 @@
   altDisplay.innerHTML = "Roll over any image<br>Drag to where you want me";
   altDisplay.style.boxShadow = '3px 3px 20px #333'
 
-  altDisplay.onmousedown = initiatedrag;
-
   let swatchx = 0;
   let swatchy = 0;
   let mousex = 0;
   let mousey = 0;
 
-  function initiatedrag(e) {
-    e = e || window.event;
-    e.preventDefault();
-    mousex = e.clientX;
-    mousey = e.clientY;
-    document.onmouseup = enddrag;
-    document.onmousemove = startdrag;
+  const initiatedrag = ev => {
+    ev = ev || window.event;
+    ev.preventDefault();
+    mousex = ev.clientX;
+    mousey = ev.clientY;
+    document.addEventListener('mouseup', enddrag);
+    document.addEventListener('mousemove', startdrag);
   }
-  function startdrag(e) {
-    e = e || window.event;
-    e.preventDefault();
-    swatchx = mousex - e.clientX;
-    swatchy = mousey - e.clientY;
-    mousex = e.clientX;
-    mousey = e.clientY;
+  const startdrag = (ev) => {
+    ev = ev || window.event;
+    ev.preventDefault();
+    swatchx = mousex - ev.clientX;
+    swatchy = mousey - ev.clientY;
+    mousex = ev.clientX;
+    mousey = ev.clientY;
     altDisplay.style.top = (altDisplay.offsetTop - swatchy) + "px";
     altDisplay.style.left = (altDisplay.offsetLeft - swatchx) + "px";
   }
-  function enddrag() {
-    document.onmouseup = null;
-    document.onmousemove = null;
+  const enddrag = _ => {
+    document.removeEventListener('mouseup', enddrag);
+    document.removeEventListener('mousemove', startdrag);
   }
+  altDisplay.addEventListener('mousedown', initiatedrag);
 
   let allimgs = document.querySelectorAll('img');
   allimgs.forEach(i => {
