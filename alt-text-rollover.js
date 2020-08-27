@@ -8,19 +8,19 @@
   altDisplay.style.maxWidth = '150px';
   altDisplay.style.overflow = 'scroll';
   altDisplay.style.top = '-100px';
+  altDisplay.style.fontSize = '14px';
   altDisplay.style.color = 'black';
   altDisplay.style.pointerEvents = 'none';
   let allimgs = document.querySelectorAll('img');
-  let out = '';
   allimgs.forEach(i => {
     i.addEventListener('mouseover',e => {
       e.target.style.opacity = 0.7;
       let coords = e.target.getBoundingClientRect();
-      let top = coords.top + 5 + 'px';
-      let left = coords.left + 5 + 'px';
+      let top = coords.y + 5 + 'px';
+      let left = coords.x + 5 + 'px';
 
       if(coords.left+20+150 > window.innerWidth) {
-        left = coords.left - 140 + 'px';
+        left = coords.x - 140 + 'px';
       }
       altDisplay.style.top = top;
       altDisplay.style.left = left;
