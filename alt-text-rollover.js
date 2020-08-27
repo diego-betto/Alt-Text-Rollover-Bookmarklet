@@ -16,12 +16,15 @@
     i.addEventListener('mouseover',e => {
       e.target.style.opacity = 0.7;
       let coords = e.target.getBoundingClientRect();
-      altDisplay.style.top = coords.top + 5 + 'px';
-      if(coords.left+coords.width+10+150 > window.innerWidth) {
-        altDisplay.style.left = coords.left - 140 + 'px';
-      } else {
-        altDisplay.style.left = coords.left + coords.width - 30 + 'px';
+      let top = coords.top + 5 + 'px';
+      let left = coords.left + 5 + 'px';
+
+      if(coords.left+20+150 > window.innerWidth) {
+        left = coords.left - 140 + 'px';
       }
+      altDisplay.style.top = top;
+      altDisplay.style.left = left;
+
       if(e.target.alt === '') {
         altDisplay.style.border = '1px solid #c00';
         altDisplay.innerHTML = 'No alt text!';
