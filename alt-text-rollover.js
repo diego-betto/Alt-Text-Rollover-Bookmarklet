@@ -1,13 +1,4 @@
 (function(){
-  const getposition = ev => {
-    let x = ev.clientX;
-    let y = ev.clientY;
-    let pos = ev.target.getBoundingClientRect();
-    return {
-      x: x - pos.x|0,
-      y: y - pos.y|0
-    };
-  }
   let altDisplay = document.createElement('div');
   document.body.appendChild(altDisplay);
   altDisplay.style.position = 'absolute';
@@ -24,14 +15,13 @@
   allimgs.forEach(i => {
     i.addEventListener('mouseover',e => {
       e.target.style.opacity = 0.7;
-      let mouse = getposition(e);
+      let coords = e.target.getBoundingClientRect();
       let top = mouse.y + window.scrollY + 5 + 'px';
-      let left = mouse.x + 5 + 'px';
+      let left = coords.x + 5 + 'px';
 
-      if(mouse.x+20+150 > window.innerWidth) {
-        left = mouse.x - 160 + 'px';
+      if(coords.left+20+150 > window.innerWidth) {
+        left = coords.x - 140 + 'px';
       }
-
       altDisplay.style.top = top;
       altDisplay.style.left = left;
 
