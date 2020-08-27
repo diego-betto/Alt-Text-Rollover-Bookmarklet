@@ -2,24 +2,24 @@
   if (document.querySelector('#alt-text-rollover-bookmark-swatch')) {
     return;
   }
-
-  // create and style swatch 
+  let styles = document.createElement('link');
+  styles.setAttribute('rel','stylesheet');
+  styles.setAttribute('href','https://codepo8.github.io/Alt-Text-Rollover-Bookmarklet/alt-text-rollover.css');
+  document.querySelector('head').appendChild(styles);
   let altDisplay = document.createElement('div');
   document.body.appendChild(altDisplay);
+  let swatchtext = document.createElement('p');
+  altDisplay.appendChild(swatchtext);
   altDisplay.id = 'alt-text-rollover-bookmark-swatch';
-  altDisplay.style.position = 'fixed';
-  altDisplay.style.background = 'yellow';
-  altDisplay.style.cursor = 'move';
-  altDisplay.style.padding = '10px';
-  altDisplay.style.fontFamily = 'Sans-serif';
-  altDisplay.style.maxWidth = '250px';
-  altDisplay.style.overflow = 'scroll';
-  altDisplay.style.top = '10px';
-  altDisplay.style.left = '10px';
-  altDisplay.style.fontSize = '16px';
-  altDisplay.style.color = 'black';
-  altDisplay.innerHTML = "Roll over any image<br>Drag to where you want me";
-  altDisplay.style.boxShadow = '3px 3px 20px #333'
+  swatchtext.innerHTML = "Roll over any image<br>Drag to where you want me";
+  let closebutton = document.createElement('button');
+  closebutton.innerText = 'ⅹ';
+  altDisplay.appendChild(closebutton);
+  closebutton.addEventListener('click', ev => {
+    ev.target.parentNode.remove();
+    styles.parentNode.removeChild(styles);
+  })
+
 
   let swatchx = 0;
   let swatchy = 0;
@@ -53,22 +53,21 @@
   let allimgs = document.querySelectorAll('img');
   allimgs.forEach(i => {
     i.addEventListener('mouseover',e => {
+      altDisplay.classList.remove('error');
       e.target.style.opacity = 0.7;
       let out = 'Image: ' + e.target.src.replace(/\/([^\/])/g,'/ $1') +'<br><br>';
       if(e.target.getAttribute('alt') === null) {
-        altDisplay.style.border = '1px solid #c00';
+        altDisplay.classList.add('error');
         out += 'No alt attribute!';
       } else {
         if(e.target.alt === '') {
-          altDisplay.style.border = '1px solid yellow';
           out += 'Empty alt text!';
         }
         if (e.target.alt !== '') {
-          altDisplay.style.border = '1px solid yellow';
           out += `"${e.target.alt}"`;
         }
       }
-      altDisplay.innerHTML = out;
+      swatchtext.innerHTML = out;
     });
     i.addEventListener('mouseout',e => {
       e.target.style.opacity = 1;
