@@ -9,7 +9,7 @@
   altDisplay.style.overflow = 'scroll';
   altDisplay.style.top = '10px';
   altDisplay.style.left = '10px';
-  altDisplay.style.fontSize = '14px';
+  altDisplay.style.fontSize = '16px';
   altDisplay.style.color = 'black';
   let allimgs = document.querySelectorAll('img');
   allimgs.forEach(i => {
