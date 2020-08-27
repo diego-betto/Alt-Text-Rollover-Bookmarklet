@@ -7,12 +7,21 @@
   <style>
     body {
       color: #000;
-      background: wheat;
+      background: #eee;
       font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+      max-width: 700px;
+      margin: 0 auto;
     }
     .link {
       padding: 2em 0;
       color: #369;
+    }
+    .row {
+      display: flex;
+      align-content: center;
+    }
+    .row div {
+      flex: 1;
     }
   </style>
 </head>
@@ -21,6 +30,13 @@
   <p>This is a quick and dirty test for a developer tool that shows the alternative text of images when you roll over them. To try it, add the following link to you bookmarks bar.</p>
 
   <p class="link"><a href="javascript:(function(){document.body.appendChild(document.createElement('script')).src='https://codepo8.github.io/Alt-Text-Rollover-Bookmarklet/alt-text-rollover.js';})();">Alt-Text-Rollover</a></p>
+
+  <p>Test it on these images</p>
+  <div class="row">
+    <div><img src="no-alt.png"></div>
+    <div><img src="empty-alt.png" alt=""></div>
+    <div><img src="valid-alt.png" alt="demo image with alt text"></div>
+  </div>
 
 </body>
 </html>

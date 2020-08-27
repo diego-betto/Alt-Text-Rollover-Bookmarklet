@@ -5,7 +5,7 @@
   altDisplay.style.background = 'yellow';
   altDisplay.style.padding = '10px';
   altDisplay.style.fontFamily = 'Sans-serif';
-  altDisplay.style.maxWidth = '150px';
+  altDisplay.style.maxWidth = '250px';
   altDisplay.style.overflow = 'scroll';
   altDisplay.style.top = '10px';
   altDisplay.style.left = '10px';
@@ -16,18 +16,24 @@
     i.addEventListener('mouseover',e => {
       e.target.style.opacity = 0.7;
       altDisplay.style.left = '10px';
-      if(e.target.alt === '') {
+      let out = 'Image: ' + e.target.src +'<br><br>';
+      if(e.target.getAttribute('alt') === null) {
         altDisplay.style.border = '1px solid #c00';
-        altDisplay.innerHTML = 'No alt text!';
+        out += 'No alt attribute!';
       } else {
-        altDisplay.style.border = '1px solid yellow';
-        altDisplay.innerHTML = e.target.alt
+        if(e.target.alt === '') {
+          altDisplay.style.border = '1px solid yellow';
+          out += 'Empty alt text!';
+        }
+        if (e.target.alt !== '') {
+          altDisplay.style.border = '1px solid yellow';
+          out += e.target.alt
+        }
       }
+      altDisplay.innerHTML = out;
     });
     i.addEventListener('mouseout',e => {
       e.target.style.opacity = 1;
-      altDisplay.style.left = '-100vw';
-      altDisplay.innerHTML = ''
     });
   });
 })();
