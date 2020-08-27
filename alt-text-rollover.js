@@ -1,28 +1,32 @@
 (function(){
-  if (document.querySelector('#alt-text-rollover-bookmark-swatch')) {
+  const id = 'alt-text-rollover-bookmark-swatch';
+  const scriptname = 'alt-text-rollover.js';
+  const stylesurl = 'https://codepo8.github.io/Alt-Text-Rollover-Bookmarklet/alt-text-rollover.css';
+  const headertext = 'Drag here';
+  const initialtext = 'Roll over any image<br>Drag to where you want me';
+
+  if (document.querySelector('#' + id)) {
     return;
   }
   let styles = document.createElement('link');
   styles.setAttribute('rel','stylesheet');
-  styles.setAttribute('href','https://codepo8.github.io/Alt-Text-Rollover-Bookmarklet/alt-text-rollover.css');
+  styles.setAttribute('href', stylesurl);
 //  styles.setAttribute('href','alt-text-rollover.css');
   document.querySelector('head').appendChild(styles);
   let altDisplay = document.createElement('div');
   document.body.appendChild(altDisplay);
   let draghead = document.createElement('h1');
-  draghead.innerHTML = 'Drag here';
+  draghead.innerHTML = headertext;
   altDisplay.appendChild(draghead);
   let swatchtext = document.createElement('p');
   altDisplay.appendChild(swatchtext);
-  altDisplay.id = 'alt-text-rollover-bookmark-swatch';
-  swatchtext.innerHTML = "Roll over any image<br>Drag to where you want me";
-
+  altDisplay.id = id;
+  swatchtext.innerHTML = initialtext;
   let closebutton = document.createElement('button');
   closebutton.innerText = 'ⅹ';
   closebutton.title = 'close';
   draghead.appendChild(closebutton);
   closebutton.addEventListener('click', ev => {
-    ev.target.parentNode.remove();
     styles.parentNode.removeChild(styles);
     allimgs.forEach(i => {
       i.removeEventListener('mouseover', overimg);
@@ -30,12 +34,12 @@
     });
     let scripts = document.querySelectorAll('script');
     scripts.forEach(s => {
-      if(s.src.indexOf('alt-text-rollover.js') !== -1) {
+      if(s.src.indexOf(scriptname) !== -1) {
         s.parentNode.removeChild(s);
       }
     });
-  })
-
+    document.querySelector('#' + altDisplay.id).remove();
+  });
 
   let swatchx = 0;
   let swatchy = 0;
