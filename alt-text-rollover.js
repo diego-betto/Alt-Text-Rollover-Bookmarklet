@@ -12,9 +12,6 @@
     get error() {
       return this.hasAttribute('error');
     }
-    get hidden() {
-      return this.hasAttribute('error');
-    }
     get alttext() {
       return this.hasAttribute('alttext');
     }
