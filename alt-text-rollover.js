@@ -1,84 +1,162 @@
 (function(){
-  const id = 'alt-text-rollover-bookmark-swatch';
-  const scriptname = 'alt-text-rollover.js';
-  const stylesurl = 'https://codepo8.github.io/Alt-Text-Rollover-Bookmarklet/alt-text-rollover.css';
-  const headertext = 'Drag here';
-  const initialtext = 'Roll over any image<br>Drag to where you want me';
-
-  if (document.querySelector('#' + id)) {
+  if (document.querySelector('alt-swab')) {
     return;
   }
-  let styles = document.createElement('link');
-  styles.setAttribute('rel','stylesheet');
-  styles.setAttribute('href', stylesurl);
-//  styles.setAttribute('href','alt-text-rollover.css');
-  document.querySelector('head').appendChild(styles);
-  let altDisplay = document.createElement('div');
-  document.body.appendChild(altDisplay);
-  let draghead = document.createElement('h1');
-  draghead.innerHTML = headertext;
-  altDisplay.appendChild(draghead);
-  let swatchtext = document.createElement('p');
-  altDisplay.appendChild(swatchtext);
-  altDisplay.id = id;
-  swatchtext.innerHTML = initialtext;
-  let closebutton = document.createElement('button');
-  closebutton.innerText = 'ⅹ';
-  closebutton.title = 'close';
-  draghead.appendChild(closebutton);
-  closebutton.addEventListener('click', ev => {
-    styles.parentNode.removeChild(styles);
-    allimgs.forEach(i => {
-      i.removeEventListener('mouseover', overimg);
-      i.removeEventListener('mouseout', outimg);
-    });
-    let scripts = document.querySelectorAll('script');
-    scripts.forEach(s => {
-      if(s.src.indexOf(scriptname) !== -1) {
-        s.parentNode.removeChild(s);
+  class altSwab extends HTMLElement {
+    constructor () {
+      super();
+    }
+    static get observedAttributes() {
+      return ['error','alttext','hidden'];
+    }
+    get error() {
+      return this.hasAttribute('error');
+    }
+    get hidden() {
+      return this.hasAttribute('error');
+    }
+    get alttext() {
+      return this.hasAttribute('alttext');
+    }
+    get hidden() {
+      return this.hasAttribute('alttext');
+    }
+    attributeChangedCallback(name, oldValue, newValue) {
+      if(this.shadowRoot){
+        if (this.error) {
+          this.shadowRoot.querySelector('div').classList.add('error');
+        } else {
+          this.shadowRoot.querySelector('div').classList.remove('error');
+        }
+        if (this.hidden) {
+          this.shadowRoot.querySelector('div').classList.add('hidden');
+        } else {
+          this.shadowRoot.querySelector('div').classList.remove('hidden');
+        }
+
+        if (this.alttext) {
+          this.shadowRoot.querySelector('p').innerHTML = this.getAttribute('alttext');
+        } else {
+          this.shadowRoot.querySelector('p').innerHTML = ''
+        }
       }
-    });
-    document.querySelector('#' + altDisplay.id).remove();
-  });
+    }
+    connectedCallback () {
+      let shadowRoot = this.attachShadow({mode: 'open'});
+      shadowRoot.innerHTML = `
+        <style>
+        div {
+          position: fixed;
+          background: yellow;
+          font-family: Sans-serif;
+          max-width: 250px;
+          overflow: scroll ;
+          top: 10px;
+          left: 10px;
+          font-size: 16px;
+          color:black;
+          box-shadow:3px 3px 20px #333;
+          border: 5px solid yellow;
+          opacity: 0.95;
+        }
+        div.error {
+          border: 5px solid firebrick;
+        }
+        div h1 {
+          cursor: move;
+          font-size: 1em;
+          padding: .2em .5em;
+          background: grey;
+          margin: 0;
+          font-weight: normal;
+          position: relative;
+        }
+        div:hover {
+          opacity: 1;
+        }
+        .hidden {
+          display: none;
+        }
+        div.error {
+          border: 5px solid firebrick;
+        }
+        
+        div button {
+          border: none;
+          font-size: 18px;
+          background: transparent;
+          font-family: inherit;
+          font-style: inherit;
+          position: absolute;
+          top: -2px;
+          right: 2px;
+        }
+        div button:hover {
+          color: yellow;
+          background: black;
+        }
+        </style>
+        <div>
+          <h1>Drag here <button title="close">ⅹ</button></h1>
+          <p></p>
+        </div>
+      `;
+  
+      shadowRoot.querySelector('button').addEventListener('click', e => {
+        this.setAttribute('hidden',true);
+      });
 
-  let swatchx = 0;
-  let swatchy = 0;
-  let mousex = 0;
-  let mousey = 0;
-
-  const initiatedrag = ev => {
-    ev = ev || window.event;
-    ev.preventDefault();
-    mousex = ev.clientX;
-    mousey = ev.clientY;
-    document.addEventListener('mouseup', enddrag);
-    document.addEventListener('mousemove', startdrag);
+      let swatchx = 0;
+      let swatchy = 0;
+      let mousex = 0;
+      let mousey = 0;
+    
+      const initiatedrag = ev => {
+        ev = ev || window.event;
+        ev.preventDefault();
+        mousex = ev.clientX;
+        mousey = ev.clientY;
+        document.addEventListener('mouseup', enddrag);
+        document.addEventListener('mousemove', startdrag);
+      }
+      const startdrag = (ev) => {
+        ev = ev || window.event;
+        ev.preventDefault();
+        swatchx = mousex - ev.clientX;
+        swatchy = mousey - ev.clientY;
+        mousex = ev.clientX;
+        mousey = ev.clientY;
+        shadowRoot.querySelector('div').style.top = (shadowRoot.querySelector('div').offsetTop - swatchy) + "px";
+        shadowRoot.querySelector('div').style.left = (shadowRoot.querySelector('div').offsetLeft - swatchx) + "px";
+      }
+      const enddrag = _ => {
+        document.removeEventListener('mouseup', enddrag);
+        document.removeEventListener('mousemove', startdrag);
+      }
+      shadowRoot.querySelector('h1').addEventListener('mousedown', initiatedrag);
+    }
   }
-  const startdrag = (ev) => {
-    ev = ev || window.event;
-    ev.preventDefault();
-    swatchx = mousex - ev.clientX;
-    swatchy = mousey - ev.clientY;
-    mousex = ev.clientX;
-    mousey = ev.clientY;
-    altDisplay.style.top = (altDisplay.offsetTop - swatchy) + "px";
-    altDisplay.style.left = (altDisplay.offsetLeft - swatchx) + "px";
-  }
-  const enddrag = _ => {
-    document.removeEventListener('mouseup', enddrag);
-    document.removeEventListener('mousemove', startdrag);
-  }
-  draghead.addEventListener('mousedown', initiatedrag);
+  window.customElements.define('alt-swab', altSwab);
+  
+  
+  let altDisplay = document.createElement('alt-swab');
+  document.body.appendChild(altDisplay);
+  altDisplay.setAttribute(
+    'alttext', 
+    'Roll over any image<br>Drag to where you want me'
+  );
+  altDisplay.removeAttribute('hidden');
 
   const outimg = e => {
     e.target.style.opacity = 1;
   };
   const overimg = e => {
-    altDisplay.classList.remove('error');
+    altDisplay.removeAttribute('error');
+    altDisplay.removeAttribute('hidden');
     e.target.style.opacity = 0.7;
     let out = 'Image: ' + e.target.src.replace(/\/([^\/])/g,'/ $1') +'<br><br>';
     if(e.target.getAttribute('alt') === null) {
-      altDisplay.classList.add('error');
+      altDisplay.setAttribute('error',1);
       out += 'No alt attribute!';
     } else {
       if(e.target.alt === '') {
@@ -88,7 +166,7 @@
         out += `"${e.target.alt}"`;
       }
     }
-    swatchtext.innerHTML = out;
+    altDisplay.setAttribute('alttext', out);
   };
 
   let allimgs = document.querySelectorAll('img');
