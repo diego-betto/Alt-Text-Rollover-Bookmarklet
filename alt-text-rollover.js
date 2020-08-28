@@ -88,8 +88,10 @@
           font-family: inherit;
           font-style: inherit;
           position: absolute;
-          top: -2px;
+          top: 0;
           right: 2px;
+          margin: 0 5px 0 0;
+          padding: 0;
         }
         div button:hover {
           color: yellow;
@@ -97,7 +99,8 @@
         }
         </style>
         <div>
-          <h1>Drag here <button title="close">ⅹ</button></h1>
+          <h1>Drag here</h1>
+          <button title="close">ⅹ</button>
           <p></p>
         </div>
       `;
