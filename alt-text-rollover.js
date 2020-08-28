@@ -19,7 +19,7 @@
       return this.hasAttribute('alttext');
     }
     get hidden() {
-      return this.hasAttribute('alttext');
+      return this.hasAttribute('hidden');
     }
     attributeChangedCallback(name, oldValue, newValue) {
       if(this.shadowRoot){
